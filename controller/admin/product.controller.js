@@ -8,7 +8,6 @@ module.exports.index = async (req, res) => {
         { name: "Dừng hoạt động", status: "inactive", class: "" }
     ];
 
-    // Xử lý active đúng 1 nút tương ứng
     if (req.query.status) {
         const index = filterStatus.findIndex(item => item.status == req.query.status);
         if (index !== -1) filterStatus[index].class = "active";
@@ -17,10 +16,17 @@ module.exports.index = async (req, res) => {
         if (index !== -1) filterStatus[index].class = "active";
     }
 
-    // Điều kiện lọc MongoDB
     let find = { deleted: false };
+
     if (req.query.status) {
         find.status = req.query.status;
+    }
+
+    let keyword = "";
+    if (req.query.keyword) {
+        keyword = req.query.keyword;
+        const regex = new RegExp(keyword, "i"); // Tìm kiếm không phân biệt hoa/thường
+        find.title = regex;
     }
 
     const products = await Product.find(find);
@@ -28,6 +34,7 @@ module.exports.index = async (req, res) => {
     res.render("admin/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
         products: products,
-        filterStatus: filterStatus
+        filterStatus: filterStatus,
+        keyword: keyword
     });
 };
