@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
     deleted: Boolean
 });
 
-const Product = mongoose.model('Product', productSchema, "products");
+// Truyền "products" làm tham số thứ 3 để ép Mongoose đọc đúng collection này
+const Product = mongoose.model("Product", productSchema, "products");
 
 module.exports = Product;
