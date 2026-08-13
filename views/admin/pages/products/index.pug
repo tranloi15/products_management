@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 
 include ../../mixins/filter.status.pug
 include ../../mixins/search.pug
+
 block main
   h1 Danh sách sản phẩm
 
@@ -52,3 +53,37 @@ block main
           else
             tr
               td(colspan="6" class="text-center") Không tìm thấy sản phẩm nào
+
+      //- Chuyển nav vào trong .card-body và thụt lề đúng cho vòng lặp - for
+      nav(class="mt-3")
+        ul(class="pagination")
+          li(class="page-item")
+                button(
+                  class="page-link"
+                  button-pagination=pagination.currentPage-1
+                ) Trang đầu
+          if(pagination.currentPage > 1)
+            li(class="page-item")
+              button(
+                class="page-link"
+                button-pagination=pagination.currentPage-1
+              ) Trang trước
+
+          - for (var i = 1; i <= pagination.totalPage; i++)
+            li(class=`page-item ${pagination.currentPage == i ? "active" : ""}`)
+              button(
+                class="page-link"
+                button-pagination=i
+              ) #{i}
+
+          if(pagination.currentPage < pagination.totalPage)
+            li(class="page-item")
+              button(
+                class="page-link"
+                button-pagination=pagination.currentPage+1
+              ) Kế tiếp
+          li(class="page-item")
+              button(
+                class="page-link"
+                button-pagination=pagination.currentPage+1
+              ) Trang cuối
