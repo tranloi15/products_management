@@ -14,4 +14,6 @@ router.patch("/edit/:id", controller.editPatch);
 // [PATCH] /admin/products/change-multi
 router.patch("/change-multi", controller.changeMulti);
 
+router.delete("/delete/:id", controller.deleteItem);
+
 module.exports = router;

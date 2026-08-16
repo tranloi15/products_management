@@ -75,7 +75,11 @@ block main
                     ) Dừng hoạt động
                 td
                   button(class="btn btn-warning btn-sm") Sửa
-                  button(class="btn btn-danger btn-sm ml-1") Xóa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=item.id
+                  ) Xóa
           else
             tr
               td(colspan="7" class="text-center") Không tìm thấy sản phẩm nào
@@ -83,15 +87,15 @@ block main
   +pagination(pagination)
 
   form(
-    action=`${prefixAdmin}/products/change-status/${item.status}/${item.id}?_method=PATCH` method="POST"
+    action=""
     method="POST"
     id="form-change-status"
     data-path=`${prefixAdmin}/products/change-status`
   )
-    input(
-      type="hidden"
-      name="_method"
-      value="PATCH"
-    )
-
-  script(src="/js/product.js")
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`${prefixAdmin}/products/delete`
+  )
+  script(src="/admin/js/product.js")
