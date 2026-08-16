@@ -3,6 +3,7 @@ extends ../../layouts/default.pug
 include ../../mixins/filter.status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
 
 block main
   h1 Danh sách sản phẩm
@@ -19,9 +20,15 @@ block main
   .card.mb-3
     .card-header Danh sách sản phẩm
     .card-body
-      table.table.table-hover.table-sm
+      +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+      table(
+        class="table table-hover table-sm"
+        checkbox-multi
+      )
         thead
           tr
+            th
+              input(type="checkbox" name="checkall")
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -33,6 +40,12 @@ block main
           if (products && products.length > 0)
             each item, index in products
               tr
+                td
+                  input(
+                    type="checkbox"
+                    name="id"
+                    value=item.id
+                  )
                 td #{index + 1}
                 td
                   img(
@@ -65,12 +78,12 @@ block main
                   button(class="btn btn-danger btn-sm ml-1") Xóa
           else
             tr
-              td(colspan="6" class="text-center") Không tìm thấy sản phẩm nào
+              td(colspan="7" class="text-center") Không tìm thấy sản phẩm nào
 
   +pagination(pagination)
 
   form(
-    action=""
+    action=`${prefixAdmin}/products/change-status/${item.status}/${item.id}?_method=PATCH` method="POST"
     method="POST"
     id="form-change-status"
     data-path=`${prefixAdmin}/products/change-status`

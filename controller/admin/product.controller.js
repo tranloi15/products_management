@@ -48,17 +48,54 @@ module.exports.index = async (req, res) => {
 
 const mongoose = require("mongoose");
 
-
 // [GET] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
-    // Tránh update nếu id không phải là ObjectId (chặn các lỗi dạng /back)
     if (id && id !== "back") {
-        await Product.updateOne({ _id: id }, { status: status });
+        await Product.updateOne(
+            { _id: id },
+            { status: status }
+        );
     }
 
-    // Chuyển hướng về trang danh sách sản phẩm
-    res.redirect("/admin/products");
+    const referer = req.get("referer");
+    if (referer) {
+        res.redirect(referer);
+    } else {
+        res.redirect("/admin/products");
+    }
+};
+// [PATCH] /admin/products/edit/:id
+module.exports.editPatch = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        await Product.updateOne({ _id: id }, req.body);
+
+        req.flash("success", "Cập nhật sản phẩm thành công!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Cập nhật sản phẩm thất bại!");
+        res.redirect("back");
+    }
+};
+// [PATCH] /admin/products/change-multi
+module.exports.changeMulti = async (req, res) => {
+    const type = req.body.type;
+    const ids = req.body.ids.split(", ");
+
+    switch (type) {
+        case "active":
+            await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+            break;
+        case "inactive":
+            await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+            break;
+        default:
+            break;
+    }
+
+    res.redirect("back");
 };
