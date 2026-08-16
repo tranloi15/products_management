@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema({
     thumbnail: String,
     status: String,
     position: Number,
-    deleted: Boolean
+    deleted: Boolean,
+    deleteAt: Date
 });
 
 // Truyền "products" làm tham số thứ 3 để ép Mongoose đọc đúng collection này

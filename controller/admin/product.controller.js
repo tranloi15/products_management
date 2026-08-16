@@ -48,39 +48,16 @@ module.exports.index = async (req, res) => {
 
 const mongoose = require("mongoose");
 
-// [GET] /admin/products/change-status/:status/:id
+// [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
-    if (id && id !== "back") {
-        await Product.updateOne(
-            { _id: id },
-            { status: status }
-        );
-    }
+    await Product.updateOne({ _id: id }, { status: status });
 
-    const referer = req.get("referer");
-    if (referer) {
-        res.redirect(referer);
-    } else {
-        res.redirect("/admin/products");
-    }
+    res.redirect("back");
 };
-// [PATCH] /admin/products/edit/:id
-module.exports.editPatch = async (req, res) => {
-    try {
-        const id = req.params.id;
 
-        await Product.updateOne({ _id: id }, req.body);
-
-        req.flash("success", "Cập nhật sản phẩm thành công!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Cập nhật sản phẩm thất bại!");
-        res.redirect("back");
-    }
-};
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
@@ -104,7 +81,12 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
 
-    await Product.deleteOne({ _id: id });
+    //await Product.deleteOne({ _id: id });// xoa vinh vien
+
+    await Product.updateOne({ _id: id }, {
+        deleted: true,
+        deletedAt: new Date()
+    });//xoa mem
 
     res.redirect("back");
 };

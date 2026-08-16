@@ -8,9 +8,6 @@ router.get("/", controller.index);
 // [PATCH] /admin/products/change-status/:status/:id
 router.patch("/change-status/:status/:id", controller.changeStatus);
 
-// [PATCH] /admin/products/edit/:id
-router.patch("/edit/:id", controller.editPatch);
-
 // [PATCH] /admin/products/change-multi
 router.patch("/change-multi", controller.changeMulti);
 

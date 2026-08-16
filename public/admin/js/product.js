@@ -1,3 +1,4 @@
+// Change Status
 const buttonsChangeStatus = document.querySelectorAll("[button-change-status]");
 
 if (buttonsChangeStatus.length > 0) {
@@ -11,13 +12,16 @@ if (buttonsChangeStatus.length > 0) {
 
             let statusChange = statusCurrent === "active" ? "inactive" : "active";
 
-            const action = `${path}/${statusChange}/${id}`;
+            // Đường dẫn lúc này sẽ chuẩn: /admin/products/change-status/active/ID?_method=PATCH
+            const action = `${path}/${statusChange}/${id}?_method=PATCH`;
 
             formChangeStatus.action = action;
             formChangeStatus.submit();
         });
     });
 }
+// End Change Status
+
 
 // Delete Item
 const buttonsDelete = document.querySelectorAll("[button-delete]");
