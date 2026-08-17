@@ -1,6 +1,9 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const flash = require("express-flash");
 require("dotenv").config();
 
 const database = require("./config/database.js");
@@ -14,15 +17,26 @@ database.connect();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extended: true }));
-
 app.use(methodOverride("_method"));
-//parse application
+
+// Parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 
 app.set("views", "./views");
 app.set("view engine", "pug");
-//app locals variables
+
+// Flash & Cookie & Session
+app.use(cookieParser("LOI2006"));
+app.use(session({
+    secret: "LOI2006",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}));
+app.use(flash());
+// End Flash
+
+// App locals variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 app.use(express.static("public"));
