@@ -94,6 +94,7 @@ module.exports.changeMulti = async (req, res) => {
                 await Product.updateOne({ _id: id }, {
                     position: position
                 });
+                req.flash("success", `Đã đổi vị trí thành công ${ids.length} sản phẩm!`);
             }
             break;
         default:
@@ -113,6 +114,6 @@ module.exports.deleteItem = async (req, res) => {
         deleted: true,
         deletedAt: new Date()
     });//xoa mem
-
+    req.flash("success", `Đã xóa thành công ${ids.length} sản phẩm!`);
     res.redirect("back");
 };
