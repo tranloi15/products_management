@@ -1,24 +1,23 @@
 // Button Status
-const buttonsStatus = document.querySelectorAll(
-    "[button-status]"
-);
+const buttonsStatus = document.querySelectorAll("[button-status]");
 if (buttonsStatus.length > 0) {
-    buttonsStatus.forEach((button) => {
+    let url = new URL(window.location.href);
+    buttonsStatus.forEach(button => {
         button.addEventListener("click", () => {
-            let url = new URL(window.location.href);
-            const status = button.getAttribute(
-                "button-status"
-            );
+            const status = button.getAttribute("button-status");
+
             if (status) {
                 url.searchParams.set("status", status);
             } else {
                 url.searchParams.delete("status");
             }
+
             window.location.href = url.href;
         });
     });
 }
 // End Button Status
+
 // Form Search
 const formSearch = document.querySelector("#form-search");
 if (formSearch) {
@@ -59,8 +58,12 @@ if (buttonsPagination.length > 0) {
 // Checkbox Multi
 const checkboxMulti = document.querySelector("[checkbox-multi]");
 if (checkboxMulti) {
-    const inputCheckAll = checkboxMulti.querySelector("input[name='checkall']");
-    const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
+    const inputCheckAll = checkboxMulti.querySelector(
+        "input[name='checkall']"
+    );
+    const inputsId = checkboxMulti.querySelectorAll(
+        "input[name='id']"
+    );
 
     inputCheckAll.addEventListener("click", () => {
         if (inputCheckAll.checked) {
@@ -80,7 +83,6 @@ if (checkboxMulti) {
                 "input[name='id']:checked"
             ).length;
 
-            console.log(countChecked);
             if (countChecked == inputsId.length) {
                 inputCheckAll.checked = true;
             } else {
@@ -102,13 +104,30 @@ if (formChangeMulti) {
             "input[name='id']:checked"
         );
 
+        const typeChange = e.target.elements.type.value;
+
+        if (typeChange === "delete-all") {
+            const isConfirm = confirm("Bạn có chắc muốn xóa những sản phẩm này?");
+            if (!isConfirm) {
+                return;
+            }
+        }
+
         if (inputsChecked.length > 0) {
             let ids = [];
             const inputIds = formChangeMulti.querySelector("input[name='ids']");
 
             inputsChecked.forEach(input => {
                 const id = input.value;
-                ids.push(id);
+
+                if (typeChange == "change-position") {
+                    const position = input
+                        .closest("tr")
+                        .querySelector("input[name='position']").value;
+                    ids.push(`${id}-${position}`);
+                } else {
+                    ids.push(id);
+                }
             });
 
             inputIds.value = ids.join(", ");
@@ -119,3 +138,26 @@ if (formChangeMulti) {
     });
 }
 // End Form Change Multi
+
+// Change Status
+const buttonsChangeStatus = document.querySelectorAll("[button-change-status]");
+
+if (buttonsChangeStatus.length > 0) {
+    const formChangeStatus = document.querySelector("#form-change-status");
+    const path = formChangeStatus.getAttribute("data-path");
+
+    buttonsChangeStatus.forEach((button) => {
+        button.addEventListener("click", () => {
+            const statusCurrent = button.getAttribute("data-status");
+            const id = button.getAttribute("data-id");
+
+            let statusChange = statusCurrent === "active" ? "inactive" : "active";
+
+            const action = `${path}/${statusChange}/${id}?_method=PATCH`;
+
+            formChangeStatus.action = action;
+            formChangeStatus.submit();
+        });
+    });
+}
+// End Change Status
