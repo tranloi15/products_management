@@ -17,14 +17,27 @@ router.patch("/change-multi", controller.changeMulti);
 
 router.delete("/delete/:id", controller.deleteItem);
 
+// [GET] /admin/products/create
 router.get("/create", controller.create);
 
-router.post("/create", controller.createPost);
-
+// [POST] /admin/products/create (Giữ lại route đầy đủ upload và validate)
 router.post(
     "/create",
     upload.single("thumbnail"),
     validate.createPost,
-    controller.createPost);
+    controller.createPost
+);
+
+// [GET] /admin/products/edit/:id
+router.get("/edit/:id", controller.edit);
+
+// [PATCH] /admin/products/edit/:id
+router.patch(
+    "/edit/:id",
+    upload.single("thumbnail"),
+    validate.createPost,
+    controller.editPatch
+);
+
 
 module.exports = router;
