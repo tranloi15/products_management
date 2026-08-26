@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -25,6 +26,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
+
+// TinyMCE
+app.use(
+    '/tinymce',
+    express.static(path.join(__dirname, 'node_modules', 'tinymce'))
+);
+// End TinyMCE
 
 // Flash & Cookie & Session
 app.use(cookieParser("LOI2006"));
