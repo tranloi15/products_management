@@ -1,46 +1,20 @@
 extends ../../layouts/default.pug
 
-include ../../mixins/filter.status.pug
-include ../../mixins/search.pug
-include ../../mixins/pagination.pug
-include ../../mixins/form-change-multi.pug
-include ../../mixins/alert.pug
-include ../../mixins/sort.pug
-
 block main
-  +alert-success("5000")
-
-  h1 Danh sách sản phẩm
+  h1 Danh mục sản phẩm
 
   .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
+    .card-header Danh sách
     .card-body
       .row
-        .col-6
-          +filter-status(filterStatus)
-        .col-6
-          +search(keyword)
-
-  .card.mb-3
-    .card-header Sắp xếp
-    .card-body
-      .row
+        .col-8
         .col-4
-          +sort()
-          
-
-  .card.mb-3
-    .card-header Danh sách sản phẩm
-    .card-body
-      .row 
-        .col-8 
-          +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-        .col-4 
           a(
-            href=`${prefixAdmin}/products/create`
+            href=`${prefixAdmin}/products-category/create`
             class="btn btn-outline-success"
           ) + Thêm mới
- 
+      
+      
       table(
         class="table table-hover table-sm"
         checkbox-multi
@@ -58,8 +32,8 @@ block main
             th Hành động
 
         tbody
-          if (products && products.length > 0)
-            each item, index in products
+          if (records && records.length > 0)
+            each item, index in records
               tr
                 td
                   input(
@@ -76,7 +50,6 @@ block main
                     height="auto"
                   )
                 td #{item.title}
-                td #{item.price}$
                 td
                   input(
                     type="number"
@@ -104,11 +77,11 @@ block main
                     ) Dừng hoạt động
                 td
                   a(
-                    href=`${prefixAdmin}/products/detail/${item.id}`
+                    href=`${prefixAdmin}/products-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                   ) Chi tiết
                   a(
-                    href=`${prefixAdmin}/products/edit/${item.id}`
+                    href=`${prefixAdmin}/products-category/edit/${item.id}`
                     class="btn btn-warning btn-sm"
                   ) Sửa
                   button(
@@ -116,26 +89,3 @@ block main
                     button-delete
                     data-id=item.id
                   ) Xóa
-          else
-            tr
-              td(colspan="7" class="text-center") Không tìm thấy sản phẩm nào
-
-  +pagination(pagination)
-
-  //- Form ẩn dùng cho tính năng Đổi trạng thái
-  form(
-    action=""
-    method="POST"
-    id="form-change-status"
-    data-path=`${prefixAdmin}/products/change-status`
-  )
-
-  //- Form ẩn dùng cho tính năng Xóa sản phẩm
-  form(
-    action=""
-    method="POST"
-    id="form-delete-item"
-    data-path=`${prefixAdmin}/products/delete`
-  )
-
-  script(src="/admin/js/product.js")
