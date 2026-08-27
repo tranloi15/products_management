@@ -21,4 +21,5 @@ router.post(
     controller.createPost
 );
 
+router.patch("/change-multi", controller.changeMulti);
 module.exports = router;

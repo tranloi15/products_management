@@ -1,20 +1,32 @@
 extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/sort-category.pug
+include ../../mixins/form-change-multi.pug
 
 block main
-  h1 Danh mục sản phẩm
+  h1 #{pageTitle}
+
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+    .card-body
+      .row
+        .col-6
+          +filter-status(filterStatus)
+        .col-4
+          +sort()
 
   .card.mb-3
     .card-header Danh sách
     .card-body
       .row
         .col-8
+          +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
         .col-4
           a(
             href=`${prefixAdmin}/products-category/create`
-            class="btn btn-outline-success"
+            class="btn btn-outline-success float-right"
           ) + Thêm mới
-      
-      
+
       table(
         class="table table-hover table-sm"
         checkbox-multi
@@ -26,7 +38,6 @@ block main
             th STT
             th Hình ảnh
             th Tiêu đề
-            th Giá
             th Vị trí
             th Trạng thái
             th Hành động
