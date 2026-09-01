@@ -175,9 +175,15 @@ module.exports.edit = async (req, res) => {
 
         const product = await Product.findOne(find);
 
+        const category = await productCategory.find({
+            deleted: false
+        });
+        const newCategory = createTreeHelper.createTree(category);
+
         res.render("admin/pages/products/edit", {
             pageTitle: "Chỉnh sửa sản phẩm",
-            product: product
+            product: product,
+            category: newCategory
         });
     } catch (error) {
         req.flash("error", `Không tìm thấy sản phẩm!`);
