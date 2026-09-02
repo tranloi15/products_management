@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const methodOverride = require('method-override');
 
 const controller = require("../../controller/admin/role.controller");
 
@@ -12,5 +13,13 @@ router.post("/create", controller.createPost);
 router.get("/edit/:id", controller.edit);
 
 router.patch("/edit/:id", controller.editPatch);
+
+router.get("/detail/:id", controller.detail);
+
+router.delete("/delete/:id", controller.deleteItem);
+
+router.get("/permissions", controller.permissions);
+
+router.patch("/permissions", controller.permissionsPatch);
 
 module.exports = router;

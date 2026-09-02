@@ -1,0 +1,32 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Chi tiết nhóm quyền
+
+  if (role.title)
+    div(class="mb-4")
+      span Tên nhóm quyền: 
+      b #{role.title}
+
+  if (role.description)
+    div(class="mb-4")
+      span Mô tả ngắn: 
+      b !{role.description}
+
+  if (role.permissions && role.permissions.length > 0)
+    div(class="mb-4")
+      h5 Danh sách quyền:
+      ul
+        each permission in role.permissions
+          li(class="badge bg-secondary me-2 p-2") #{permission}
+  else
+    div(class="mb-4 text-muted fst-italic") Chưa có quyền nào được phân cho nhóm này.
+
+  a(
+    href=`${prefixAdmin}/roles/edit/${role.id}`
+    class="btn btn-warning btn-sm me-2"
+  ) Chỉnh sửa
+  a(
+    href=`${prefixAdmin}/roles`
+    class="btn btn-secondary btn-sm"
+  ) Quay lại

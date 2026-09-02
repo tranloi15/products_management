@@ -72,3 +72,77 @@ module.exports.editPatch = async (req, res) => {
 
     res.redirect("back");
 };
+// [GET] /admin/roles/detail/:id
+module.exports.detail = async (req, res) => {
+    try {
+        const find = {
+            deleted: false,
+            _id: req.params.id
+        };
+
+        const role = await Role.findOne(find);
+
+        if (!role) {
+            return res.redirect(`${systemConfig.prefixAdmin}/roles`);
+        }
+
+        res.render("admin/pages/roles/detail", {
+            pageTitle: `Chi tiết nhóm quyền: ${role.title}`,
+            role: role
+        });
+    } catch (error) {
+        res.redirect(`${systemConfig.prefixAdmin}/roles`);
+    }
+};
+// [DELETE] /admin/roles/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        await Role.updateOne(
+            { _id: id },
+            {
+                deleted: true,
+                deletedAt: new Date()
+            }
+        );
+
+        req.flash("success", "Xóa nhóm quyền thành công!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Xóa nhóm quyền thất bại!");
+        res.redirect("back");
+    }
+};
+// [GET] /admin/roles/permissions
+module.exports.permissions = async (req, res) => {
+    let find = {
+        deleted: false
+    };
+
+    const records = await Role.find(find);
+
+    res.render("admin/pages/roles/permissions", {
+        pageTitle: "Phân quyền",
+        records: records
+    });
+};
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+    try {
+        const permissions = JSON.parse(req.body.permissions);
+
+        for (const item of permissions) {
+            await Role.updateOne(
+                { _id: item.id },
+                { permissions: item.permissions }
+            );
+        }
+
+        req.flash("success", "Cập nhật phân quyền thành công!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Cập nhật phân quyền thất bại!");
+        res.redirect("back");
+    }
+};
