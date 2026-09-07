@@ -1,0 +1,41 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") #{pageTitle}
+
+  if (data.avatar)
+    div(class="mb-4")
+      img(
+        src=data.avatar
+        style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
+      )
+
+  if (data.fullName)
+    p Họ tên: <b>#{data.fullName}</b>
+
+  if (data.email)
+    p Email: <b>#{data.email}</b>
+
+  if (data.phone)
+    p Số điện thoại: <b>#{data.phone}</b>
+
+  if (role)
+    p Phân quyền: <b>#{role.title}</b>
+
+  if (data.status)
+    div(class="mb-4")
+      span Trạng thái: 
+      if (data.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động
+
+  a(
+    href=`${prefixAdmin}/accounts/edit/${data.id}`
+    class="btn btn-warning"
+  ) Chỉnh sửa
+  
+  a(
+    href=`${prefixAdmin}/accounts`
+    class="btn btn-secondary ml-2"
+  ) Quay lại

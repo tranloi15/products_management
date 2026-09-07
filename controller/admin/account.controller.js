@@ -113,3 +113,55 @@ module.exports.editPatch = async (req, res) => {
 
     res.redirect("back");
 };
+// [GET] /admin/accounts/detail/:id
+module.exports.detail = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const data = await Account.findOne({
+            _id: id,
+            deleted: false
+        }).select("-password -token");
+
+        if (!data) {
+            req.flash("error", "Tài khoản không tồn tại!");
+            return res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+        }
+
+        let role = null;
+        if (data.role_id) {
+            role = await Role.findOne({
+                _id: data.role_id,
+                deleted: false
+            });
+        }
+
+        res.render("admin/pages/accounts/detail", {
+            pageTitle: "Chi tiết tài khoản",
+            data: data,
+            role: role
+        });
+    } catch (error) {
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+};
+// [DELETE] /admin/accounts/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        await Account.updateOne(
+            { _id: id },
+            {
+                deleted: true,
+                deletedAt: new Date()
+            }
+        );
+
+        req.flash("success", "Xóa tài khoản thành công!");
+    } catch (error) {
+        req.flash("error", "Xóa tài khoản thất bại!");
+    }
+
+    res.redirect("back");
+};

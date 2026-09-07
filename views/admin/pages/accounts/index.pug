@@ -40,7 +40,7 @@ block main
                     height="auto"
                   )
                 td #{item.fullName}
-                td #{item.role.title}
+                td #{item.role ? item.role.title : ""}
                 td #{item.email}
                 td
                   if (item.status === "active")
@@ -72,3 +72,10 @@ block main
           else
             tr
               td(colspan="7" class="text-center") Chưa có tài khoản nào được tạo.
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`${prefixAdmin}/accounts/delete`
+  )
