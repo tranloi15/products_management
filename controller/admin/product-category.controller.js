@@ -69,7 +69,7 @@ module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
 
     if (!req.body.ids || req.body.ids.trim() === "") {
-        return res.redirect("back");
+        return res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
     }
 
     const ids = req.body.ids.split(", ").filter((id) => id.trim() !== "");
@@ -117,7 +117,7 @@ module.exports.changeMulti = async (req, res) => {
             break;
     }
 
-    res.redirect("back");
+    res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
 };
 
 // [GET] /admin/products-category/edit/:id
@@ -161,10 +161,10 @@ module.exports.editPatch = async (req, res) => {
         await productCategory.updateOne({ _id: id }, req.body);
 
         req.flash("success", "Cập nhật danh mục thành công!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
     } catch (error) {
         req.flash("error", "Cập nhật danh mục thất bại!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
     }
 };
 
@@ -201,9 +201,9 @@ module.exports.deleteItem = async (req, res) => {
         );
 
         req.flash("success", "Xóa danh mục thành công!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
     } catch (error) {
         req.flash("error", "Xóa danh mục thất bại!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
     }
 };

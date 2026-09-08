@@ -5,33 +5,36 @@ block main
   +alert-success(5000)
   +alert-error(5000)
 
-  h1(class="mb-4") Thêm mới nhóm quyền
+  if(role.permissions.includes("roles_create"))
+    h1(class="mb-4") Thêm mới nhóm quyền
 
-  form(
-    action=`${prefixAdmin}/roles/create`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        required
-      )
+    form(
+      action=`${prefixAdmin}/roles/create`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+        )
 
-    div(class="form-group")
-      label(for="desc") Mô tả ngắn
-      textarea(
-        class="form-control textarea-mce"
-        id="desc"
-        name="description"
-        rows="5"
-      )
+      div(class="form-group")
+        label(for="desc") Mô tả ngắn
+        textarea(
+          class="form-control textarea-mce"
+          id="desc"
+          name="description"
+          rows="5"
+        )
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
+  else
+    h2 Bạn không có quyền truy cập tính năng này!

@@ -35,6 +35,7 @@ module.exports.createPost = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/roles/create`);
     }
 };
+
 // [GET] /admin/roles/edit/:id
 module.exports.edit = async (req, res) => {
     try {
@@ -55,6 +56,7 @@ module.exports.edit = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/roles`);
     }
 };
+
 // [PATCH] /admin/roles/edit/:id
 module.exports.editPatch = async (req, res) => {
     try {
@@ -70,8 +72,9 @@ module.exports.editPatch = async (req, res) => {
         req.flash("error", "Cập nhật nhóm quyền thất bại!");
     }
 
-    res.redirect("back");
+    res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/roles`);
 };
+
 // [GET] /admin/roles/detail/:id
 module.exports.detail = async (req, res) => {
     try {
@@ -94,6 +97,7 @@ module.exports.detail = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/roles`);
     }
 };
+
 // [DELETE] /admin/roles/delete/:id
 module.exports.deleteItem = async (req, res) => {
     try {
@@ -108,12 +112,13 @@ module.exports.deleteItem = async (req, res) => {
         );
 
         req.flash("success", "Xóa nhóm quyền thành công!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/roles`);
     } catch (error) {
         req.flash("error", "Xóa nhóm quyền thất bại!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/roles`);
     }
 };
+
 // [GET] /admin/roles/permissions
 module.exports.permissions = async (req, res) => {
     let find = {
@@ -127,6 +132,7 @@ module.exports.permissions = async (req, res) => {
         records: records
     });
 };
+
 // [PATCH] /admin/roles/permissions
 module.exports.permissionsPatch = async (req, res) => {
     try {
@@ -140,9 +146,9 @@ module.exports.permissionsPatch = async (req, res) => {
         }
 
         req.flash("success", "Cập nhật phân quyền thành công!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/roles/permissions`);
     } catch (error) {
         req.flash("error", "Cập nhật phân quyền thất bại!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/roles/permissions`);
     }
 };

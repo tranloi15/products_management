@@ -25,7 +25,7 @@ module.exports.index = async (req, res) => {
         pageTitle: "Danh sách tài khoản",
         records: records,
     });
-}
+};
 
 // [GET] /admin/accounts/create
 module.exports.create = async (req, res) => {
@@ -38,14 +38,13 @@ module.exports.create = async (req, res) => {
         roles: roles
     });
 };
+
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
     const emailExist = await Account.findOne({
         email: req.body.email,
         deleted: false
     });
-
-    console.log(emailExist);
 
     if (emailExist) {
         req.flash("error", `Email ${req.body.email} đã tồn tại`);
@@ -59,6 +58,7 @@ module.exports.createPost = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 };
+
 // [GET] /admin/accounts/edit/:id
 module.exports.edit = async (req, res) => {
     let find = {
@@ -82,6 +82,7 @@ module.exports.edit = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 };
+
 // [PATCH] /admin/accounts/edit/:id
 module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
@@ -95,7 +96,8 @@ module.exports.editPatch = async (req, res) => {
 
         if (emailExist) {
             req.flash("error", `Email ${req.body.email} đã tồn tại!`);
-            return res.redirect("back");
+            // Thay "back" bằng req.get("Referrer")
+            return res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/accounts`);
         }
 
         if (req.body.password) {
@@ -111,8 +113,10 @@ module.exports.editPatch = async (req, res) => {
         req.flash("error", "Cập nhật tài khoản thất bại!");
     }
 
-    res.redirect("back");
+    // Thay "back" bằng req.get("Referrer")
+    res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/accounts`);
 };
+
 // [GET] /admin/accounts/detail/:id
 module.exports.detail = async (req, res) => {
     try {
@@ -145,6 +149,7 @@ module.exports.detail = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 };
+
 // [DELETE] /admin/accounts/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
@@ -163,5 +168,6 @@ module.exports.deleteItem = async (req, res) => {
         req.flash("error", "Xóa tài khoản thất bại!");
     }
 
-    res.redirect("back");
+    // Thay "back" bằng req.get("Referrer")
+    res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/accounts`);
 };

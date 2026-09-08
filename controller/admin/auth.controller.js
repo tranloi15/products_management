@@ -4,15 +4,12 @@ const systemConfig = require("../../config/system");
 
 // [GET] /admin/auth/login
 module.exports.login = (req, res) => {
-    console.log(req.cookies.token);
-    if (req.cookies.token) {
-        res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
-    } else {
-        res.render("admin/pages/auth/login", {
-            pageTitle: "Đăng nhập"
-        });
-    }
-}
+    res.render("admin/pages/auth/login", {
+        pageTitle: "Trang đăng nhập"
+    });
+};
+
+// [POST] /admin/auth/login
 module.exports.loginPost = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -33,14 +30,17 @@ module.exports.loginPost = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
         return;
     }
+
     if (user.status != "active") {
         req.flash("error", "Tài khoản đã bị khóa!");
-        res.redirect("back");
+        res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/auth/login`);
         return;
     }
+
     res.cookie("token", user.token);
     res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 };
+
 // [GET] /admin/auth/logout
 module.exports.logout = (req, res) => {
     res.clearCookie("token");
