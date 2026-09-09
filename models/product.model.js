@@ -43,9 +43,16 @@ const productSchema = new mongoose.Schema({
             default: Date.now
         }
     },
-}, {
-    timestamps: true
-});
+    updatedBy: [
+        {
+            account_id: String,
+            updatedAt: Date
+        }
+    ],
+},
+    {
+        timestamps: true
+    });
 
 const Product = mongoose.model("Product", productSchema, "products");
 
