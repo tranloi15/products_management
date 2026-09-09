@@ -15,17 +15,14 @@ const systemConfig = require("./config/system.js");
 const routeAdmin = require("./routes/admin/index.route.js");
 const routeClient = require("./routes/client/index.route.js");
 
-database.connect();
-
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(methodOverride("_method"));
-
-// Parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 
-app.set("views", `${__dirname}/views`);
+// Chuẩn hóa path cho môi trường Linux trên Vercel
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 // TinyMCE
@@ -33,7 +30,6 @@ app.use(
     '/tinymce',
     express.static(path.join(__dirname, 'node_modules', 'tinymce'))
 );
-// End TinyMCE
 
 // Flash & Cookie & Session
 app.use(cookieParser("LOI2006"));
@@ -44,18 +40,34 @@ app.use(session({
     cookie: { maxAge: 60000 }
 }));
 app.use(flash());
-// End Flash
 
 // App locals variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 app.locals.moment = moment;
 
-app.use(express.static(`${__dirname}/public`));
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Middleware kết nối Database
+app.use(async (req, res, next) => {
+    try {
+        await database.connect();
+        next();
+    } catch (error) {
+        console.error("Database connection error in middleware:", error);
+        return res.status(500).send("Database connection error");
+    }
+});
 
 // Routes
 routeAdmin(app);
 routeClient(app);
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
-});
+// Chạy local
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`App listening on port ${port}`);
+    });
+}
+
+module.exports = app;
