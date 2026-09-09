@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block main
   +alert-success(5000)
@@ -26,6 +27,8 @@ block main
               th STT
               th Nhóm quyền
               th Mô tả ngắn
+              th Người tạo
+              th Người cập nhật
               th Hành động
 
           tbody
@@ -35,6 +38,21 @@ block main
                   td #{index + 1}
                   td #{item.title}
                   td !{item.description}
+
+                  td
+                    if(item.accountFullName)
+                      p #{item.accountFullName}
+                    if(item.createdBy && item.createdBy.createdAt)
+                      p
+                        +formatDateTime(item.createdBy.createdAt)
+
+                  td
+                    - const updatedBy = item.updatedBy?.slice(-1)[0];
+                    if(updatedBy && updatedBy.accountFullName)
+                      p #{updatedBy.accountFullName}
+                      p
+                        +formatDateTime(updatedBy.updatedAt)
+
                   td
                     a(
                       class="btn btn-secondary btn-sm"
@@ -55,7 +73,7 @@ block main
                       ) Xóa
             else
               tr
-                td(colspan="4" class="text-center") Chưa có nhóm quyền nào được tạo.
+                td(colspan="6" class="text-center") Chưa có nhóm quyền nào được tạo.
 
     form(
       action=""

@@ -2,20 +2,18 @@ const productCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const createTreeHelper = require("../../helpers/createTree");
+const Account = require("../../models/account.model");
 
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {
     const filterStatus = filterStatusHelper(req.query);
 
-    let find = {
-        deleted: false,
-    };
+    let find = { deleted: false };
 
     if (req.query.status) {
         find.status = req.query.status;
     }
 
-    // Logic Sort
     let sort = {};
     if (req.query.sortKey && req.query.sortValue) {
         sort[req.query.sortKey] = req.query.sortValue;
@@ -25,6 +23,32 @@ module.exports.index = async (req, res) => {
 
     const records = await productCategory.find(find).sort(sort);
     const newRecords = createTreeHelper.createTree(records);
+
+    const setAuditInfo = async (items) => {
+        for (const item of items) {
+            // Người tạo
+            if (item.createdBy?.account_id) {
+                const userCreated = await Account.findOne({ _id: item.createdBy.account_id }).select("fullName");
+                if (userCreated) {
+                    item.accountFullName = userCreated.fullName;
+                }
+            }
+
+            const updatedBy = item.updatedBy?.slice(-1)[0];
+            if (updatedBy) {
+                const userUpdated = await Account.findOne({ _id: updatedBy.account_id }).select("fullName");
+                if (userUpdated) {
+                    updatedBy.accountFullName = userUpdated.fullName;
+                }
+            }
+
+            if (item.children && item.children.length > 0) {
+                await setAuditInfo(item.children);
+            }
+        }
+    };
+
+    await setAuditInfo(newRecords);
 
     res.render("admin/pages/products-category/index", {
         pageTitle: "Danh mục sản phẩm",
@@ -57,6 +81,12 @@ module.exports.createPost = async (req, res) => {
         req.body.position = parseInt(req.body.position);
     }
 
+    // Ghi nhận thông tin người tạo
+    req.body.createdBy = {
+        account_id: res.locals.user.id,
+        createdAt: new Date()
+    };
+
     const record = new productCategory(req.body);
     await record.save();
 
@@ -74,11 +104,26 @@ module.exports.changeMulti = async (req, res) => {
 
     const ids = req.body.ids.split(", ").filter((id) => id.trim() !== "");
 
+    // Thông tin người sửa
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    };
+
+    // Thông tin người xóa
+    const deletedBy = {
+        account_id: res.locals.user.id,
+        deletedAt: new Date()
+    };
+
     switch (type) {
         case "active":
             await productCategory.updateMany(
                 { _id: { $in: ids } },
-                { status: "active" }
+                {
+                    status: "active",
+                    $push: { updatedBy: updatedBy }
+                }
             );
             req.flash("success", `Cập nhật trạng thái thành công cho ${ids.length} danh mục!`);
             break;
@@ -86,7 +131,10 @@ module.exports.changeMulti = async (req, res) => {
         case "inactive":
             await productCategory.updateMany(
                 { _id: { $in: ids } },
-                { status: "inactive" }
+                {
+                    status: "inactive",
+                    $push: { updatedBy: updatedBy }
+                }
             );
             req.flash("success", `Dừng hoạt động thành công cho ${ids.length} danh mục!`);
             break;
@@ -94,7 +142,10 @@ module.exports.changeMulti = async (req, res) => {
         case "delete-all":
             await productCategory.updateMany(
                 { _id: { $in: ids } },
-                { deleted: true, deletedAt: new Date() }
+                {
+                    deleted: true,
+                    deletedBy: deletedBy
+                }
             );
             req.flash("success", `Đã xóa thành công ${ids.length} danh mục!`);
             break;
@@ -106,7 +157,10 @@ module.exports.changeMulti = async (req, res) => {
                     position = parseInt(position);
                     await productCategory.updateOne(
                         { _id: id },
-                        { position: position }
+                        {
+                            position: position,
+                            $push: { updatedBy: updatedBy }
+                        }
                     );
                 }
             }
@@ -158,7 +212,20 @@ module.exports.editPatch = async (req, res) => {
             req.body.position = parseInt(req.body.position);
         }
 
-        await productCategory.updateOne({ _id: id }, req.body);
+        // Tạo object thông tin người cập nhật
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        };
+
+        // Lưu thông tin form và thêm bản ghi vào mảng updatedBy
+        await productCategory.updateOne(
+            { _id: id },
+            {
+                ...req.body,
+                $push: { updatedBy: updatedBy }
+            }
+        );
 
         req.flash("success", "Cập nhật danh mục thành công!");
         res.redirect(req.get("Referrer") || `${systemConfig.prefixAdmin}/products-category`);
@@ -192,11 +259,16 @@ module.exports.deleteItem = async (req, res) => {
     try {
         const id = req.params.id;
 
+        const deletedBy = {
+            account_id: res.locals.user.id,
+            deletedAt: new Date()
+        };
+
         await productCategory.updateOne(
             { _id: id },
             {
                 deleted: true,
-                deletedAt: new Date(),
+                deletedBy: deletedBy
             }
         );
 

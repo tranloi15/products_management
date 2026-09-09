@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block main
   +alert-success(5000)
@@ -31,6 +32,26 @@ block main
           name="description"
           rows="5"
         ) !{data.description}
+
+      //- Khối hiển thị thông tin người tạo và người sửa
+      div(class="card mb-4 bg-light")
+        div(class="card-body py-2")
+          if(data.accountFullName)
+            p(class="mb-1 text-muted")
+              strong Người tạo: 
+              | #{data.accountFullName} 
+              if(data.createdBy && data.createdBy.createdAt)
+                | - (
+                +formatDateTime(data.createdBy.createdAt)
+                | )
+
+          - const updatedBy = data.updatedBy?.slice(-1)[0];
+          if(updatedBy && updatedBy.accountFullName)
+            p(class="mb-0 text-muted")
+              strong Cập nhật lần cuối bởi: 
+              | #{updatedBy.accountFullName} - (
+              +formatDateTime(updatedBy.updatedAt)
+              | )
 
       div(class="form-group")
         button(

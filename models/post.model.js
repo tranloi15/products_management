@@ -3,15 +3,20 @@ const slug = require("mongoose-slug-updater");
 
 mongoose.plugin(slug);
 
-const productCategorySchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     title: String,
-    parent_id: {
+    post_category_id: {
         type: String,
-        default: "",
+        default: ""
     },
     description: String,
+    content: String,
     thumbnail: String,
     status: String,
+    featured: {
+        type: String,
+        default: "0" // "1": nổi bật, "0": không
+    },
     position: Number,
     slug: {
         type: String,
@@ -27,7 +32,7 @@ const productCategorySchema = new mongoose.Schema({
     },
     deleted: {
         type: Boolean,
-        default: false,
+        default: false
     },
     deletedBy: {
         account_id: String,
@@ -40,9 +45,9 @@ const productCategorySchema = new mongoose.Schema({
         }
     ]
 }, {
-    timestamps: true,
+    timestamps: true
 });
 
-const ProductCategory = mongoose.model("ProductCategory", productCategorySchema, "products-category");
+const Post = mongoose.model("Post", postSchema, "posts");
 
-module.exports = ProductCategory;
+module.exports = Post;

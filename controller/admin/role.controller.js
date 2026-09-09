@@ -1,4 +1,5 @@
 const Role = require("../../models/role.model");
+const Account = require("../../models/account.model");
 const systemConfig = require("../../config/system");
 
 // [GET] /admin/roles
@@ -8,6 +9,31 @@ module.exports.index = async (req, res) => {
     };
 
     const records = await Role.find(find);
+
+    for (const record of records) {
+        // Lấy thông tin người tạo
+        if (record.createdBy?.account_id) {
+            const userCreated = await Account.findOne({
+                _id: record.createdBy.account_id
+            }).select("fullName");
+
+            if (userCreated) {
+                record.accountFullName = userCreated.fullName;
+            }
+        }
+
+        // Lấy thông tin người cập nhật gần nhất
+        const updatedBy = record.updatedBy?.slice(-1)[0];
+        if (updatedBy) {
+            const userUpdated = await Account.findOne({
+                _id: updatedBy.account_id
+            }).select("fullName");
+
+            if (userUpdated) {
+                updatedBy.accountFullName = userUpdated.fullName;
+            }
+        }
+    }
 
     res.render("admin/pages/roles/index", {
         pageTitle: "Nhóm quyền",
@@ -25,6 +51,11 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/roles/create
 module.exports.createPost = async (req, res) => {
     try {
+        req.body.createdBy = {
+            account_id: res.locals.user.id,
+            createdAt: new Date()
+        };
+
         const record = new Role(req.body);
         await record.save();
 
@@ -41,12 +72,35 @@ module.exports.edit = async (req, res) => {
     try {
         const id = req.params.id;
 
-        let find = {
+        const data = await Role.findOne({
             _id: id,
             deleted: false
-        };
+        });
 
-        const data = await Role.findOne(find);
+        if (!data) {
+            return res.redirect(`${systemConfig.prefixAdmin}/roles`);
+        }
+
+        // Lấy thông tin người tạo
+        if (data.createdBy?.account_id) {
+            const userCreated = await Account.findOne({
+                _id: data.createdBy.account_id
+            }).select("fullName");
+            if (userCreated) {
+                data.accountFullName = userCreated.fullName;
+            }
+        }
+
+        // Lấy thông tin người sửa gần nhất
+        const updatedBy = data.updatedBy?.slice(-1)[0];
+        if (updatedBy) {
+            const userUpdated = await Account.findOne({
+                _id: updatedBy.account_id
+            }).select("fullName");
+            if (userUpdated) {
+                updatedBy.accountFullName = userUpdated.fullName;
+            }
+        }
 
         res.render("admin/pages/roles/edit", {
             pageTitle: "Sửa nhóm quyền",
@@ -62,9 +116,17 @@ module.exports.editPatch = async (req, res) => {
     try {
         const id = req.params.id;
 
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        };
+
         await Role.updateOne(
             { _id: id },
-            req.body
+            {
+                ...req.body,
+                $push: { updatedBy: updatedBy }
+            }
         );
 
         req.flash("success", "Cập nhật nhóm quyền thành công!");
@@ -103,11 +165,16 @@ module.exports.deleteItem = async (req, res) => {
     try {
         const id = req.params.id;
 
+        const deletedBy = {
+            account_id: res.locals.user.id,
+            deletedAt: new Date()
+        };
+
         await Role.updateOne(
             { _id: id },
             {
                 deleted: true,
-                deletedAt: new Date()
+                deletedBy: deletedBy
             }
         );
 
@@ -138,10 +205,18 @@ module.exports.permissionsPatch = async (req, res) => {
     try {
         const permissions = JSON.parse(req.body.permissions);
 
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        };
+
         for (const item of permissions) {
             await Role.updateOne(
                 { _id: item.id },
-                { permissions: item.permissions }
+                {
+                    permissions: item.permissions,
+                    $push: { updatedBy: updatedBy }
+                }
             );
         }
 

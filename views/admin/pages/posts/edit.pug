@@ -1,0 +1,64 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
+block main
+  +alert-error(5000)
+
+  if(role.permissions.includes("posts_edit"))
+    h1(class="mb-4") #{pageTitle}
+
+    form(
+      action=`${prefixAdmin}/posts/edit/${post.id}?_method=PATCH`
+      id="form-edit-post"
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(type="text" class="form-control" id="title" name="title" required value=post.title)
+
+      div(class="form-group")
+        label(for="post_category_id") Danh mục
+        select(name="post_category_id" id="post_category_id" class="form-control")
+          option(value="") -- Chọn danh mục --
+          if(category)
+            +select-tree(category, 1, post.post_category_id)
+
+      div(class="form-group form-check form-check-inline")
+        input(type="radio" class="form-check-input" id="featured1" name="featured" value="1" checked=(post.featured == "1" ? true : false))
+        label(for="featured1" class="form-check-label") Nổi bật
+      div(class="form-group form-check form-check-inline")
+        input(type="radio" class="form-check-input" id="featured0" name="featured" value="0" checked=(post.featured == "0" ? true : false))
+        label(for="featured0" class="form-check-label") Không nổi bật
+
+      div(class="form-group")
+        label(for="desc") Mô tả ngắn
+        textarea(class="form-control textarea-mce" id="desc" name="description" rows="5") !{post.description}
+
+      div(class="form-group")
+        label(for="content") Nội dung
+        textarea(class="form-control textarea-mce" id="content" name="content" rows="10") !{post.content}
+
+      div(class="form-group" upload-image)
+        label(for="thumbnail") Ảnh đại diện
+        input(type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*" upload-image-input)
+        img(src=post.thumbnail upload-image-preview class="image-preview")
+
+      div(class="form-group")
+        label(for="position") Vị trí
+        input(type="number" class="form-control" id="position" name="position" value=post.position min="1")
+
+      div(class="form-group form-check form-check-inline")
+        input(type="radio" class="form-check-input" id="statusActive" name="status" value="active" checked=(post.status == "active" ? true : false))
+        label(for="statusActive" class="form-check-label") Hoạt động
+
+      div(class="form-group form-check form-check-inline")
+        input(type="radio" class="form-check-input" id="statusInActive" name="status" value="inactive" checked=(post.status == "inactive" ? true : false))
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+      div(class="form-group")
+        button(type="submit" class="btn btn-primary") Cập nhật
+  else
+    h2 Bạn không có quyền truy cập tính năng này!
+    

@@ -5,7 +5,7 @@ block main
   +alert-success(5000)
   +alert-error(5000)
 
-  h1(class="mb-4") Phân quyền
+  h1(class="mb-4") #{pageTitle}
 
   if(records)
     div(data-records=records)
@@ -26,7 +26,6 @@ block main
           th Tính năng
           each item in records
             th(class="text-center") #{item.title}
-
       tbody
         tr(data-name="id" class="d-none")
           td
@@ -36,7 +35,7 @@ block main
 
         //- Danh mục sản phẩm
         tr
-          td(colspan=records.length + 1)
+          td(colspan=(records.length + 1))
             b Danh mục sản phẩm
         tr(data-name="products-category_view")
           td Xem
@@ -61,8 +60,8 @@ block main
 
         //- Danh sách sản phẩm
         tr
-          td(colspan=records.length + 1)
-            b Danh sách sản phẩm
+          td(colspan=(records.length + 1))
+            b Sản phẩm
         tr(data-name="products_view")
           td Xem
           each item in records
@@ -84,9 +83,59 @@ block main
             td(class="text-center")
               input(type="checkbox")
 
+        //- Danh mục bài viết (Mới thêm)
+        tr
+          td(colspan=(records.length + 1))
+            b Danh mục bài viết
+        tr(data-name="posts-category_view")
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="posts-category_create")
+          td Thêm mới
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="posts-category_edit")
+          td Chỉnh sửa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="posts-category_delete")
+          td Xóa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+
+        //- Bài viết (Mới thêm)
+        tr
+          td(colspan=(records.length + 1))
+            b Bài viết
+        tr(data-name="posts_view")
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="posts_create")
+          td Thêm mới
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="posts_edit")
+          td Chỉnh sửa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="posts_delete")
+          td Xóa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+
         //- Nhóm quyền
         tr
-          td(colspan=records.length + 1)
+          td(colspan=(records.length + 1))
             b Nhóm quyền
         tr(data-name="roles_view")
           td Xem
@@ -110,31 +159,6 @@ block main
               input(type="checkbox")
         tr(data-name="roles_permissions")
           td Phân quyền
-          each item in records
-            td(class="text-center")
-              input(type="checkbox")
-
-        //- Tài khoản
-        tr
-          td(colspan=records.length + 1)
-            b Tài khoản
-        tr(data-name="accounts_view")
-          td Xem
-          each item in records
-            td(class="text-center")
-              input(type="checkbox")
-        tr(data-name="accounts_create")
-          td Thêm mới
-          each item in records
-            td(class="text-center")
-              input(type="checkbox")
-        tr(data-name="accounts_edit")
-          td Chỉnh sửa
-          each item in records
-            td(class="text-center")
-              input(type="checkbox")
-        tr(data-name="accounts_delete")
-          td Xóa
           each item in records
             td(class="text-center")
               input(type="checkbox")
