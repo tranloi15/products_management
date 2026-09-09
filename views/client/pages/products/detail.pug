@@ -1,4 +1,5 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
 
 block main
   .container.my-3
@@ -7,24 +8,41 @@ block main
         if (product.title)
           h1(class="mb-4") #{product.title}
 
+        if (product.category)
+          div(class="mb-4")
+            span Danh mục: 
+            a(href=`/products/${product.category.slug}`) #{product.category.title}
+
+        if (product.priceNew)
+          div(class="mb-4")
+            span Giá mới: 
+            b(class="text-danger") #{product.priceNew}$
+
         if (product.price)
-          div(class="mb-4") Giá: <b>#{product.price}$</b>
+          div(class="mb-4")
+            span Giá cũ: 
+            del #{product.price}$
 
         if (product.discountPercentage)
-          div(class="mb-4") Giảm giá: <b>#{product.discountPercentage}%</b>
+          div(class="mb-4")
+            span Giảm giá: 
+            b(class="badge bg-danger") -#{product.discountPercentage}%
 
         if (product.stock)
-          div(class="mb-4") Còn lại: <b>#{product.stock}</b>
+          div(class="mb-4")
+            span Còn lại: 
+            b #{product.stock} sản phẩm
 
         if (product.thumbnail)
           div(class="mb-4")
             img(
-              src=product.thumbnail
-              style="width: 100px"
+              src=(product.thumbnail && product.thumbnail !== '/uploads/undefined' ? product.thumbnail : 'https://placehold.co/300x200?text=No+Image')
+              alt=product.title
+              onerror="this.onerror=null;this.src='https://placehold.co/300x200?text=No+Image';"
+              style="width: 250px; border-radius: 8px;"
             )
-        
-        if (product.position)
-          div(class="mb-4") Vị trí: <b>#{product.position}</b>
 
         if (product.description)
-          div(class="mb-4") Mô tả: !{product.description}
+          div(class="mb-4")
+            h5 Mô tả sản phẩm:
+            div !{product.description}
