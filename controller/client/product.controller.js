@@ -17,46 +17,77 @@ module.exports.index = async (req, res) => {
         products: newProducts,
     });
 };
-
-// [GET] /products/detail/:slug
+// [GET] /products/:slugProduct
 module.exports.detail = async (req, res) => {
     try {
         const find = {
             deleted: false,
-            slug: req.params.slug,
-            status: "active",
+            slug: req.params.slugProduct,
+            status: "active"
         };
 
         const product = await Product.findOne(find);
-
-        if (!product) {
-            return res.redirect("/products");
-        }
-
         if (product.product_category_id) {
             const category = await ProductCategory.findOne({
                 _id: product.product_category_id,
                 status: "active",
-                deleted: false,
+                deleted: false
             });
+
             product.category = category;
         }
-
-        product.priceNew = productsHelper.priceNewProduct
-            ? productsHelper.priceNewProduct(product)
-            : (
-                (product.price * (100 - product.discountPercentage)) /
-                100
-            ).toFixed(0);
-
+        if (!product) {
+            return res.redirect("/products");
+        }
+        product.priceNew = productsHelper.priceNewProduct(product);
         res.render("client/pages/products/detail", {
             pageTitle: product.title,
-            product: product,
+            product: product
         });
     } catch (error) {
+        console.error(error);
         res.redirect("/products");
     }
 };
+// [GET] /products/detail/:slug
+// module.exports.detail = async (req, res) => {
+//     try {
+//         const find = {
+//             deleted: false,
+//             slug: req.params.slug,
+//             status: "active",
+//         };
+
+//         const product = await Product.findOne(find);
+
+//         if (!product) {
+//             return res.redirect("/products");
+//         }
+
+//         if (product.product_category_id) {
+//             const category = await ProductCategory.findOne({
+//                 _id: product.product_category_id,
+//                 status: "active",
+//                 deleted: false,
+//             });
+//             product.category = category;
+//         }
+
+//         product.priceNew = productsHelper.priceNewProduct
+//             ? productsHelper.priceNewProduct(product)
+//             : (
+//                 (product.price * (100 - product.discountPercentage)) /
+//                 100
+//             ).toFixed(0);
+
+//         res.render("client/pages/products/detail", {
+//             pageTitle: product.title,
+//             product: product,
+//         });
+//     } catch (error) {
+//         res.redirect("/products");
+//     }
+// };
 
 // [GET] /products/:slugCategory
 module.exports.category = async (req, res) => {
