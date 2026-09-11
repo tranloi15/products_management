@@ -8,18 +8,33 @@ header.header
           a(href="/")
             img(src="/images/logo.jpeg", alt="Logo")
 
-      .col-9
+      .col-5
         .inner-menu
           ul
             li
               a(href="/") Trang chủ
             li(class="sub-menu")
-              -const pathProduct = "/products";
+              - const pathProduct = "/products";
               a(href=pathProduct) Sản phẩm
-              if(layoutCategoryProducts)
+              if (layoutCategoryProducts)
                 +sub-menu(layoutCategoryProducts, pathProduct)
             li(class="sub-menu")
-              -const pathPost = "/posts";
+              - const pathPost = "/posts";
               a(href=pathPost) Bài viết
-              if(layoutCategoryPosts)
+              if (layoutCategoryPosts)
                 +sub-menu(layoutCategoryPosts, pathPost)
+
+      .col-4
+        form(action="/search" method="GET")
+          div(class="form-group d-flex mb-0")
+            input(
+              type="text"
+              placeholder="Nhập từ khóa..."
+              class="form-control"
+              name="keyword"
+              value=keyword
+            )
+            button(
+              type="submit"
+              class="btn btn-primary ml-2"
+            ) Tìm
