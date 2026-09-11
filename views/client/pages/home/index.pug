@@ -2,7 +2,10 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 include ../../mixins/product-layout.pug
 
+
 block main
+  
+
   .section-products-featured.my-5
     .container
       .row
@@ -15,6 +18,6 @@ block main
     .container
       .row
         .col-12
-          +box-head("Sản phẩm mới nhất")
+          +box-head("Sản phẩm mới")
 
       +product-grid(productsNew)

@@ -3,12 +3,14 @@ include ../mixins/sub-menu.pug
 header.header
   .container
     .row.align-items-center
+      //- Logo
       .col-3
         .inner-logo
           a(href="/")
             img(src="/images/logo.jpeg", alt="Logo")
 
-      .col-5
+      //- Menu
+      .col-4
         .inner-menu
           ul
             li
@@ -24,7 +26,8 @@ header.header
               if (layoutCategoryPosts)
                 +sub-menu(layoutCategoryPosts, pathPost)
 
-      .col-4
+      //- Tìm kiếm
+      .col-3
         form(action="/search" method="GET")
           div(class="form-group d-flex mb-0")
             input(
@@ -38,3 +41,11 @@ header.header
               type="submit"
               class="btn btn-primary ml-2"
             ) Tìm
+
+      //- Giỏ hàng
+      .col-2
+        .inner-cart.text-right
+          a(href="/cart" class="btn btn-outline-success")
+            | Giỏ hàng (
+            span #{miniCart ? miniCart.totalQuantity : 0}
+            | )
