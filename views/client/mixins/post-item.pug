@@ -1,0 +1,11 @@
+mixin post-item(item)
+  .col-4.mb-3
+    .post-item
+      .inner-image
+        a(href=`/posts/detail/${item.slug}`)
+          img(src=item.thumbnail, alt=item.title)
+      .inner-content
+        h3.inner-title
+          a(href=`/posts/detail/${item.slug}`) #{item.title}
+        if (item.description)
+          p.inner-desc !{item.description}

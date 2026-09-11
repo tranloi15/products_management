@@ -18,3 +18,8 @@ header.header
               a(href=pathProduct) Sản phẩm
               if(layoutCategoryProducts)
                 +sub-menu(layoutCategoryProducts, pathProduct)
+            li(class="sub-menu")
+              -const pathPost = "/posts";
+              a(href=pathPost) Bài viết
+              if(layoutCategoryPosts)
+                +sub-menu(layoutCategoryPosts, pathPost)

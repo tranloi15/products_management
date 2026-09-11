@@ -1,0 +1,23 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .post-detail
+    .container.my-5
+      .row
+        .col-12
+          h1(class="inner-title") #{post.title}
+
+          if (post.category)
+            div(class="inner-category mb-3")
+              span Danh mục: 
+              a(href=`/posts/${post.category.slug}`) #{post.category.title}
+
+          if (post.thumbnail)
+            .inner-thumb.mb-4
+              img(src=post.thumbnail, alt=post.title, style="max-width: 100%; height: auto;")
+
+          hr
+
+          .inner-content
+            !{post.content}
