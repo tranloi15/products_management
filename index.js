@@ -12,6 +12,8 @@ require("dotenv").config();
 const database = require("./config/database.js");
 const systemConfig = require("./config/system.js");
 
+const cartMiddleware = require("./middlewares/client/cart.middleware.js");
+
 const routeAdmin = require("./routes/admin/index.route.js");
 const routeClient = require("./routes/client/index.route.js");
 
@@ -58,6 +60,8 @@ app.use(async (req, res, next) => {
         return res.status(500).send("Database connection error");
     }
 });
+
+app.use(cartMiddleware.cartId);
 
 // Routes
 routeAdmin(app);
