@@ -4,7 +4,7 @@ header.header
   .container
     .row.align-items-center
       //- Logo
-      .col-3
+      .col-2
         .inner-logo
           a(href="/")
             img(src="/images/logo.jpeg", alt="Logo")
@@ -42,10 +42,13 @@ header.header
               class="btn btn-primary ml-2"
             ) Tìm
 
-      //- Giỏ hàng
-      .col-2
-        .inner-cart.text-right
-          a(href="/cart" class="btn btn-outline-success")
-            | Giỏ hàng (
-            span #{miniCart ? miniCart.totalQuantity : 0}
-            | )
+      //- Cụm người dùng & Giỏ hàng
+      .col-3
+        .inner-actions.d-flex.align-items-center.justify-content-end
+          a(href="/cart" class="btn btn-outline-success mr-2")
+            | Giỏ hàng (#{miniCart ? miniCart.totalQuantity : 0})
+          ul.d-flex.list-unstyled.mb-0
+            li.ml-2
+              a(href="/user/register" class="btn btn-sm btn-outline-primary") Đăng ký
+            li.ml-1
+              a(href="/user/login" class="btn btn-sm btn-primary") Đăng nhập
