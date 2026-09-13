@@ -47,9 +47,14 @@ header.header
         .inner-actions.d-flex.align-items-center.justify-content-end
           a(href="/cart" class="btn btn-outline-success mr-2")
             | Giỏ hàng (#{miniCart ? miniCart.totalQuantity : 0})
-          ul.d-flex.list-unstyled.mb-0
-            li.ml-1
-              a(href="/user/login" class="btn btn-sm btn-primary") Đăng nhập
-            li.ml-2
-              a(href="/user/register" class="btn btn-sm btn-outline-primary") Đăng ký
-            
+          ul.d-flex.align-items-center.list-unstyled.mb-0
+            if (user)
+              li.mr-2
+                a(href="/user/info" class="btn btn-sm btn-light") #{user.fullName}
+              li
+                a(href="/user/logout" class="btn btn-sm btn-outline-danger") Đăng xuất
+            else
+              li.mr-1
+                a(href="/user/login" class="btn btn-sm btn-primary") Đăng nhập
+              li
+                a(href="/user/register" class="btn btn-sm btn-outline-primary") Đăng ký
