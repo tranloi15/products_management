@@ -9,28 +9,32 @@ const authRoutes = require("./auth.route");
 const postCategoryRoutes = require("./post-category.route");
 const postRoutes = require("./post.route");
 const myAccountRoutes = require("./my-account.route");
+const orderRoutes = require("./order.route");
 
 module.exports = (app) => {
-    const PATH_ADMIN = systemConfig.prefixAdmin;
-    app.use(
-        PATH_ADMIN + "/dashboard",
-        authMiddleware.requireAuth,
-        dashboardRoutes
-    );
+  const PATH_ADMIN = systemConfig.prefixAdmin;
 
-    app.use(PATH_ADMIN + "/products", authMiddleware.requireAuth, productRoutes);
+  app.use(
+    PATH_ADMIN + "/dashboard",
+    authMiddleware.requireAuth,
+    dashboardRoutes
+  );
 
-    app.use(PATH_ADMIN + "/products-category", authMiddleware.requireAuth, productCategoryRoutes);
+  app.use(PATH_ADMIN + "/products", authMiddleware.requireAuth, productRoutes);
 
-    app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, roleRoutes);
+  app.use(PATH_ADMIN + "/products-category", authMiddleware.requireAuth, productCategoryRoutes);
 
-    app.use(PATH_ADMIN + "/accounts", authMiddleware.requireAuth, accountRoutes);
+  app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, roleRoutes);
 
-    app.use(PATH_ADMIN + "/auth", authRoutes);
+  app.use(PATH_ADMIN + "/accounts", authMiddleware.requireAuth, accountRoutes);
 
-    app.use(PATH_ADMIN + "/posts-category", authMiddleware.requireAuth, postCategoryRoutes);
+  app.use(PATH_ADMIN + "/auth", authRoutes);
 
-    app.use(PATH_ADMIN + "/posts", authMiddleware.requireAuth, postRoutes);
+  app.use(PATH_ADMIN + "/posts-category", authMiddleware.requireAuth, postCategoryRoutes);
 
-    app.use(PATH_ADMIN + "/my-account", authMiddleware.requireAuth, myAccountRoutes);
-}
+  app.use(PATH_ADMIN + "/posts", authMiddleware.requireAuth, postRoutes);
+
+  app.use(PATH_ADMIN + "/my-account", authMiddleware.requireAuth, myAccountRoutes);
+
+  app.use(PATH_ADMIN + "/orders", authMiddleware.requireAuth, orderRoutes);
+};

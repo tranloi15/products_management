@@ -1,0 +1,45 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-4
+    .row
+      .col-12
+        +box-head("Thông tin tài khoản")
+
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-body
+            if (infoUser.avatar)
+              .text-center.mb-4
+                img(
+                  src=infoUser.avatar
+                  alt=infoUser.fullName
+                  style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
+                )
+
+            .form-group.row
+              label.col-sm-3.col-form-label.font-weight-bold Họ và tên:
+              .col-sm-9
+                p.form-control-plaintext #{infoUser.fullName}
+
+            .form-group.row
+              label.col-sm-3.col-form-label.font-weight-bold Email:
+              .col-sm-9
+                p.form-control-plaintext #{infoUser.email}
+
+            if (infoUser.phone)
+              .form-group.row
+                label.col-sm-3.col-form-label.font-weight-bold Số điện thoại:
+                .col-sm-9
+                  p.form-control-plaintext #{infoUser.phone}
+
+            .form-group.row
+              label.col-sm-3.col-form-label.font-weight-bold Trạng thái:
+              .col-sm-9
+                span(class=(infoUser.status === "active" ? "badge badge-success" : "badge badge-danger"))
+                  | #{infoUser.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+
+            .text-right.mt-3
+              a(href="/user/edit" class="btn btn-warning btn-sm") Chỉnh sửa thông tin

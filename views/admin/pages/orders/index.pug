@@ -1,0 +1,53 @@
+extends ../../layouts/default.pug
+
+block main
+  if(role.permissions.includes("orders_view"))
+    h1(class="mb-4") #{pageTitle}
+
+    .card.mb-3
+      .card-header Danh sách đơn hàng
+      .card-body
+        table(class="table table-hover table-sm")
+          thead
+            tr
+              th STT
+              th Người nhận
+              th Số điện thoại
+              th Địa chỉ
+              th Tổng tiền
+              th Trạng thái
+              th Hành động
+
+          tbody
+            if (orders.length > 0)
+              each item, index in orders
+                tr
+                  td #{index + 1}
+                  td #{item.userInfo.fullName}
+                  td #{item.userInfo.phone}
+                  td #{item.userInfo.address}
+                  td #{item.totalOrderPrice ? item.totalOrderPrice.toLocaleString() : 0}đ
+                  td
+                    if(role.permissions.includes("orders_edit"))
+                      select(
+                        class="badge badge-info"
+                        button-change-status
+                        data-id=item.id
+                      )
+                        option(value="initial" selected=(item.status == "initial")) Đang xử lý
+                        option(value="shipping" selected=(item.status == "shipping")) Đang giao
+                        option(value="success" selected=(item.status == "success")) Đã giao
+                        option(value="cancel" selected=(item.status == "cancel")) Đã hủy
+                    else
+                      span(class="badge badge-info") #{item.status}
+
+                  td
+                    a(
+                      href=`${prefixAdmin}/orders/detail/${item.id}`
+                      class="btn btn-secondary btn-sm"
+                    ) Chi tiết
+            else
+              tr
+                td(colspan="7" class="text-center") Không tìm thấy đơn hàng nào.
+  else
+    h1 Bạn không có quyền truy cập trang này.
