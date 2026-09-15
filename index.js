@@ -67,6 +67,11 @@ app.use(cartMiddleware.cartId);
 routeAdmin(app);
 routeClient(app);
 
+app.use((req, res) => {
+  res.status(404).render("client/pages/errors/404", {
+    pageTitle: "404 Not Found",
+  });
+});
 // Chạy local
 if (process.env.NODE_ENV !== 'production') {
     app.listen(port, () => {
