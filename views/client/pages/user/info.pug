@@ -1,7 +1,11 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 
 block main
+  +alert-success(5000)
+  +alert-error(5000)
+
   .container.my-4
     .row
       .col-12
@@ -11,35 +15,43 @@ block main
       .col-md-8
         .card
           .card-body
-            if (infoUser.avatar)
+            if (infoUser)
               .text-center.mb-4
-                img(
-                  src=infoUser.avatar
-                  alt=infoUser.fullName
-                  style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
-                )
+                if (infoUser.avatar)
+                  img(
+                    src=infoUser.avatar
+                    alt=infoUser.fullName
+                    style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
+                  )
+                else
+                  img(
+                    src="/images/avatar-default.png"
+                    alt=infoUser.fullName
+                    style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
+                  )
 
-            .form-group.row
-              label.col-sm-3.col-form-label.font-weight-bold Họ và tên:
-              .col-sm-9
-                p.form-control-plaintext #{infoUser.fullName}
-
-            .form-group.row
-              label.col-sm-3.col-form-label.font-weight-bold Email:
-              .col-sm-9
-                p.form-control-plaintext #{infoUser.email}
-
-            if (infoUser.phone)
               .form-group.row
-                label.col-sm-3.col-form-label.font-weight-bold Số điện thoại:
+                label.col-sm-3.col-form-label.font-weight-bold Họ và tên:
                 .col-sm-9
-                  p.form-control-plaintext #{infoUser.phone}
+                  p.form-control-plaintext #{infoUser.fullName}
 
-            .form-group.row
-              label.col-sm-3.col-form-label.font-weight-bold Trạng thái:
-              .col-sm-9
-                span(class=(infoUser.status === "active" ? "badge badge-success" : "badge badge-danger"))
-                  | #{infoUser.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+              .form-group.row
+                label.col-sm-3.col-form-label.font-weight-bold Email:
+                .col-sm-9
+                  p.form-control-plaintext #{infoUser.email}
 
-            .text-right.mt-3
-              a(href="/user/edit" class="btn btn-warning btn-sm") Chỉnh sửa thông tin
+              if (infoUser.phone)
+                .form-group.row
+                  label.col-sm-3.col-form-label.font-weight-bold Số điện thoại:
+                  .col-sm-9
+                    p.form-control-plaintext #{infoUser.phone}
+
+              .form-group.row
+                label.col-sm-3.col-form-label.font-weight-bold Trạng thái:
+                .col-sm-9
+                  span(class=(infoUser.status === "active" ? "badge badge-success" : "badge badge-danger"))
+                    | #{infoUser.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+
+              .text-right.mt-3
+                a(href="/user/password/change" class="btn btn-info btn-sm mr-2") Đổi mật khẩu
+                a(href="/user/edit" class="btn btn-warning btn-sm") Chỉnh sửa thông tin

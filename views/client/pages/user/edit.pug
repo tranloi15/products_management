@@ -1,0 +1,77 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-success(5000)
+  +alert-error(5000)
+
+  .container.my-4
+    .row
+      .col-12
+        +box-head("Chỉnh sửa thông tin cá nhân")
+
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-body
+            form(
+              action="/user/edit?_method=PATCH"
+              method="POST"
+              enctype="multipart/form-data"
+            )
+              div(class="form-group")
+                label(for="fullName") Họ và tên
+                input(
+                  type="text"
+                  class="form-control"
+                  id="fullName"
+                  name="fullName"
+                  value=user.fullName
+                  required
+                )
+
+              div(class="form-group")
+                label(for="email") Email
+                input(
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  value=user.email
+                  disabled
+                )
+                small(class="form-text text-muted") Email không thể thay đổi.
+
+              div(class="form-group")
+                label(for="phone") Số điện thoại
+                input(
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  value=user.phone
+                )
+
+              div(class="form-group" upload-image)
+                label(for="avatar") Ảnh đại diện
+                input(
+                  type="file"
+                  class="form-control-file"
+                  id="avatar"
+                  name="avatar"
+                  accept="image/*"
+                  upload-image-input
+                )
+                img(
+                  src=(user.avatar ? user.avatar : "")
+                  class="image-preview mt-2"
+                  upload-image-preview
+                  style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;"
+                )
+
+              div(class="form-group text-right")
+                a(href="/user/info" class="btn btn-secondary mr-2") Hủy
+                button(
+                  type="submit"
+                  class="btn btn-primary"
+                ) Lưu thay đổi

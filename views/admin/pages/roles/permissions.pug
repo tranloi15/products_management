@@ -83,7 +83,7 @@ block main
             td(class="text-center")
               input(type="checkbox")
 
-        //- Danh mục bài viết (Mới thêm)
+        //- Danh mục bài viết
         tr
           td(colspan=(records.length + 1))
             b Danh mục bài viết
@@ -108,7 +108,7 @@ block main
             td(class="text-center")
               input(type="checkbox")
 
-        //- Bài viết (Mới thêm)
+        //- Bài viết
         tr
           td(colspan=(records.length + 1))
             b Bài viết
@@ -133,7 +133,7 @@ block main
             td(class="text-center")
               input(type="checkbox")
 
-        //- Quản lý đơn hàng (Mới thêm)
+        //- Quản lý đơn hàng
         tr
           td(colspan=(records.length + 1))
             b Đơn hàng
@@ -179,6 +179,46 @@ block main
               input(type="checkbox")
         tr(data-name="roles_permissions")
           td Phân quyền
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+
+        //- Quản lý User (Client)
+        tr
+          td(colspan=(records.length + 1))
+            b Quản lý người dùng (Client)
+        tr(data-name="users_view")
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="users_create")
+          td Thêm mới
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="users_edit")
+          td Chỉnh sửa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="users_delete")
+          td Xóa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+
+        //- Cài đặt chung
+        tr
+          td(colspan=(records.length + 1))
+            b Cài đặt chung
+        tr(data-name="settings_view")
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="settings_edit")
+          td Chỉnh sửa
           each item in records
             td(class="text-center")
               input(type="checkbox")

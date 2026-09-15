@@ -4,37 +4,43 @@
       li
         a(href=`${prefixAdmin}/dashboard`) Tổng quan
 
-      if(role.permissions.includes("products-category_view"))
-        li
-          a(href=`${prefixAdmin}/products-category`) Danh mục sản phẩm
+      if(role && role.permissions)
+        if(role.permissions.includes("products-category_view"))
+          li
+            a(href=`${prefixAdmin}/products-category`) Danh mục sản phẩm
 
-      if(role.permissions.includes("products_view"))
-        li
-          a(href=`${prefixAdmin}/products`) Danh sách sản phẩm
+        if(role.permissions.includes("products_view"))
+          li
+            a(href=`${prefixAdmin}/products`) Danh sách sản phẩm
 
-      if(role.permissions.includes("posts-category_view"))
-        li
-          a(href=`${prefixAdmin}/posts-category`) Danh mục bài viết
+        if(role.permissions.includes("posts-category_view"))
+          li
+            a(href=`${prefixAdmin}/posts-category`) Danh mục bài viết
 
-      if(role.permissions.includes("posts_view"))
-        li
-          a(href=`${prefixAdmin}/posts`) Danh sách bài viết
+        if(role.permissions.includes("posts_view"))
+          li
+            a(href=`${prefixAdmin}/posts`) Danh sách bài viết
 
-      if(role.permissions.includes("orders_view"))
-        li
-          a(href=`${prefixAdmin}/orders`) Quản lý đơn hàng
+        if(role.permissions.includes("orders_view"))
+          li
+            a(href=`${prefixAdmin}/orders`) Quản lý đơn hàng
 
-      if(role.permissions.includes("roles_view"))
-        li
-          a(href=`${prefixAdmin}/roles`) Nhóm quyền
+        if(role.permissions.includes("roles_view"))
+          li
+            a(href=`${prefixAdmin}/roles`) Nhóm quyền
 
-      if(role.permissions.includes("roles_permissions"))
-        li
-          a(href=`${prefixAdmin}/roles/permissions`) Phân quyền
+        if(role.permissions.includes("roles_permissions"))
+          li
+            a(href=`${prefixAdmin}/roles/permissions`) Phân quyền
 
-      if(role.permissions.includes("accounts_view"))
-        li
-          a(href=`${prefixAdmin}/accounts`) Tài khoản admin
+        if(role.permissions.includes("accounts_view"))
+          li
+            a(href=`${prefixAdmin}/accounts`) Danh sách tài khoản
 
-      li
-        a(href=`${prefixAdmin}/settings/general`) Cài đặt chung
+        if(role.permissions.includes("users_view"))
+          li
+            a(href=`${prefixAdmin}/users`) Tài khoản client
+
+        if(role.permissions.includes("settings_view"))
+          li
+            a(href=`${prefixAdmin}/settings/general`) Cài đặt chung
