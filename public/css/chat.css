@@ -1,0 +1,427 @@
+/* ==========================================================
+   Khung chứa Chat tổng thể
+   ========================================================== */
+.chat {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 620px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+/* ==========================================================
+   Header phòng chat
+   ========================================================== */
+.chat .inner-chat-header {
+  padding: 14px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat .inner-chat-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat .inner-chat-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fa3e7e 0%, #ff758c 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(250, 62, 126, 0.25);
+}
+
+.chat .inner-chat-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2px;
+}
+
+.chat .inner-chat-status {
+  font-size: 12px;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.chat .inner-chat-status .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  display: inline-block;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+/* ==========================================================
+   Vùng hiển thị tin nhắn (Body)
+   ========================================================== */
+.chat .inner-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fbfbfd;
+}
+
+.chat .inner-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat .inner-body::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+/* ==========================================================
+   Tin nhắn đến (Người khác - Bên trái)
+   ========================================================== */
+.chat .inner-incoming {
+  align-self: flex-start;
+  max-width: 72%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chat .inner-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  padding-left: 2px;
+}
+
+.chat .inner-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+}
+
+.chat .inner-user-avatar-placeholder {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat .inner-incoming .inner-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.chat .inner-incoming .inner-content {
+  background-color: #ffffff;
+  color: #1f2937;
+  padding: 11px 18px;
+  border-radius: 18px 18px 18px 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f2f5;
+  max-width: 100%;
+}
+
+/* ==========================================================
+   Tin nhắn đi (Của mình - Bên phải)
+   ========================================================== */
+.chat .inner-outgoing {
+  align-self: flex-end;
+  max-width: 72%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.chat .inner-outgoing .inner-content {
+  background: linear-gradient(135deg, #fa3e7e 0%, #e11d48 100%);
+  color: #ffffff;
+  padding: 11px 18px;
+  border-radius: 18px 18px 4px 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  box-shadow: 0 4px 12px rgba(250, 62, 126, 0.25);
+  max-width: 100%;
+}
+
+/* ==========================================================
+   Lưới hình ảnh trong tin nhắn
+   ========================================================== */
+.chat .inner-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.chat .inner-images img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 2px solid #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat .inner-images img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================
+   Typing Indicator (... đang soạn tin nhắn)
+   ========================================================== */
+.chat .inner-list-typing {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat .box-typing {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 8px 14px;
+  border-radius: 16px 16px 16px 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f2f5;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.chat .box-typing .inner-name {
+  font-weight: 600;
+  color: #374151;
+}
+
+.chat .inner-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 2px;
+}
+
+.chat .inner-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #fa3e7e;
+  display: inline-block;
+  animation: typingBlink 1.4s infinite ease-in-out both;
+}
+
+.chat .inner-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.chat .inner-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typingBlink {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================
+   Xem trước ảnh trước khi gửi (Preview Container)
+   ========================================================== */
+.custom-file-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 6px 0 10px 0;
+}
+
+.custom-file-container:empty {
+  display: none;
+  padding: 0;
+}
+
+.preview-image-item {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.preview-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-image-item .btn-remove-preview {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  border: none;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+
+.preview-image-item .btn-remove-preview:hover {
+  background: #ef4444;
+}
+
+/* ==========================================================
+   Thanh nhập tin nhắn (Foot)
+   ========================================================== */
+.chat .inner-foot {
+  padding: 12px 18px;
+  background-color: #ffffff;
+  border-top: 1px solid #f0f2f5;
+  position: relative;
+}
+
+.chat .inner-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat .btn-icon-action {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.chat .btn-icon-action:hover {
+  background-color: #f3f4f6;
+  color: #fa3e7e;
+}
+
+.chat .inner-form input[name="content"] {
+  flex: 1;
+  height: 44px;
+  padding: 0 18px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.chat .inner-form input[name="content"]::placeholder {
+  color: #9ca3af;
+}
+
+.chat .inner-form input[name="content"]:focus {
+  background-color: #ffffff;
+  border-color: #fa3e7e;
+  box-shadow: 0 0 0 3px rgba(250, 62, 126, 0.12);
+}
+
+.chat .inner-form button[type="submit"] {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fa3e7e 0%, #e11d48 100%);
+  color: #ffffff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(250, 62, 126, 0.25);
+  flex-shrink: 0;
+}
+
+.chat .inner-form button[type="submit"]:hover {
+  opacity: 0.92;
+  transform: scale(1.04);
+}
+
+.chat .inner-form button[type="submit"]:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================
+   Bảng Emoji Picker
+   ========================================================== */
+.tooltip-emoji-picker {
+  position: absolute;
+  bottom: 75px;
+  left: 20px;
+  z-index: 1050;
+  display: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tooltip-emoji-picker.shown {
+  display: block;
+}
+
+emoji-picker {
+  --num-columns: 8;
+  --category-emoji-size: 1.125rem;
+  width: 320px;
+  height: 350px;
+}

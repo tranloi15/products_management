@@ -2,45 +2,98 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main
-  .container.my-3
-    .row
-      .col-12
-        +box-head("Chat")
+  //- Nhúng CSS cho Chat và ViewerJS
+  link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css")
+  link(rel="stylesheet", href="/css/chat.css")
 
+  .container.my-4
     .row
       .col-12
-        .chat
-          //- .inner-head
-          //-   .inner-avatar EY
-          //-   .inner-name Em Yêu
+        +box-head("Đoạn chat")
+
+    .row.justify-content-center
+      .col-12.col-lg-10
+        .chat(my-id=user.id)
+          //- Header thanh chat
+          .inner-chat-header
+            .inner-chat-info
+              .inner-chat-avatar
+                i.fa-solid.fa-comments
+              .inner-chat-meta
+                .inner-chat-title Phòng chat chung
+                .inner-chat-status
+                  span.status-dot
+                  | Đang hoạt động
+
+          //- Khung hiển thị nội dung tin nhắn
           .inner-body
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content
-                | A ơi sang nhà e nha, nhà e không có ai ở nhà cả
-            .inner-outgoing
-              .inner-content
-                | Thế à? Ok e iu
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content
-                | Nhanh nha nhanh nha
-            .inner-outgoing
-              .inner-content
-                | Ck đến rồi mà thấy ai ở nhà đâu e? Khóa cửa mà :(
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content
-                | Thì em bảo nhà e không ai ở nhà mà :))
+            each chat in chats
+              div(
+                class=(chat.user_id == user.id ? "inner-outgoing" : "inner-incoming")
+              )
+                if (chat.user_id != user.id)
+                  .inner-user-info
+                    if (chat.infoUser && chat.infoUser.avatar)
+                      img.inner-user-avatar(src=chat.infoUser.avatar, alt=chat.infoUser.fullName)
+                    else
+                      span.inner-user-avatar-placeholder #{chat.infoUser && chat.infoUser.fullName ? chat.infoUser.fullName.charAt(0).toUpperCase() : "U"}
+                    .inner-name #{chat.infoUser ? chat.infoUser.fullName : "Người dùng"}
+
+                if (chat.content)
+                  .inner-content #{chat.content}
+
+                if (chat.images && chat.images.length > 0)
+                  .inner-images
+                    each image in chat.images
+                      img(src=image, alt="Ảnh đính kèm")
+
+            //- Danh sách người đang soạn tin nhắn
+            .inner-list-typing
+
+          //- Thanh nhập tin nhắn
           .inner-foot
+            //- Khu vực xem trước ảnh chọn trước khi gửi
+            .custom-file-container#preview-images-container
+
             form(
-              class="inner-form"
               action=""
+              class="inner-form"
             )
+              //- Nút chọn tải ảnh
+              label.btn-icon-action.btn-upload-image(for="file-upload-chat", title="Đính kèm ảnh")
+                i.fa-regular.fa-image
+              input#file-upload-chat(
+                type="file"
+                name="images"
+                accept="image/*"
+                multiple
+                class="d-none"
+              )
+
+              //- Nút Emoji
+              span.button-icon.btn-icon-action(title="Chèn biểu tượng cảm xúc")
+                i.fa-regular.fa-face-smile
+
+              //- Ô nhập nội dung
               input(
                 type="text"
-                placeholder="Nhập nội dung..."
+                placeholder="Nhập nội dung tin nhắn..."
                 name="content"
+                autocomplete="off"
               )
-              button
+
+              //- Nút Gửi
+              button(type="submit", title="Gửi tin nhắn")
                 i.fa-solid.fa-paper-plane
+
+          //- Bảng Emoji Picker (ẩn mặc định)
+          .tooltip-emoji-picker
+            emoji-picker.light
+
+block script
+  //- Thư viện Emoji Picker
+  script(type="module", src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")
+  //- Thư viện ViewerJS xem ảnh
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js")
+  //- File logic Chat
+  script(src="/js/chat.js")
