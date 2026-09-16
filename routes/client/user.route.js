@@ -9,50 +9,74 @@ const validate = require("../../validates/client/user.validate");
 const authMiddleware = require("../../middlewares/client/auth.middleware");
 const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
+// [GET] /user/register
 router.get("/register", controller.register);
 
+// [POST] /user/register
 router.post(
   "/register",
   validate.registerPost,
   controller.registerPost
 );
 
+// [GET] /user/login
 router.get("/login", controller.login);
 
+// [POST] /user/login
 router.post(
   "/login",
   validate.loginPost,
   controller.loginPost
 );
 
+// [GET] /user/logout
 router.get("/logout", controller.logout);
 
+// [GET] /user/password/forgot
 router.get("/password/forgot", controller.forgotPassword);
 
+// [POST] /user/password/forgot
 router.post(
   "/password/forgot",
   validate.forgotPasswordPost,
   controller.forgotPasswordPost
 );
 
+// [GET] /user/password/otp
 router.get("/password/otp", controller.otpPassword);
 
+// [POST] /user/password/otp
 router.post("/password/otp", controller.otpPasswordPost);
 
-router.get("/password/reset", controller.resetPassword);
+// [GET] /user/password/reset
+router.get(
+  "/password/reset",
+  authMiddleware.requireAuth,
+  controller.resetPassword
+);
 
+// [POST] /user/password/reset
 router.post(
   "/password/reset",
-  validate.resetPasswordPost,
+  authMiddleware.requireAuth,
   controller.resetPasswordPost
 );
 
-// Xem thông tin cá nhân
-router.get("/info", authMiddleware.requireAuth, controller.info);
+// [GET] /user/info 
+router.get(
+  "/info",
+  authMiddleware.requireAuth,
+  controller.info 
+);
 
-// Chỉnh sửa thông tin cá nhân
-router.get("/edit", authMiddleware.requireAuth, controller.edit);
+// [GET] /user/edit
+router.get(
+  "/edit",
+  authMiddleware.requireAuth,
+  controller.edit
+);
 
+// [PATCH] /user/edit
 router.patch(
   "/edit",
   authMiddleware.requireAuth,
@@ -62,9 +86,17 @@ router.patch(
 );
 
 // [GET] /user/password/change
-router.get("/password/change", authMiddleware.requireAuth, controller.changePassword);
+router.get(
+  "/password/change",
+  authMiddleware.requireAuth,
+  controller.changePassword
+);
 
 // [PATCH] /user/password/change
-router.patch("/password/change", authMiddleware.requireAuth, controller.changePasswordPatch);
+router.patch(
+  "/password/change",
+  authMiddleware.requireAuth,
+  controller.changePasswordPatch
+);
 
 module.exports = router;
