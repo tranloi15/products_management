@@ -199,9 +199,19 @@ if (chatElement && typeof socket !== "undefined") {
   // 6. Xử lý Emoji Picker
   // ==========================================
   if (buttonIcon && tooltipEmoji) {
+    let popperInstance = null;
+    if (typeof Popper !== "undefined") {
+      popperInstance = Popper.createPopper(buttonIcon, tooltipEmoji, {
+        placement: "top-start",
+      });
+    }
+
     buttonIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       tooltipEmoji.classList.toggle("shown");
+      if (popperInstance) {
+        popperInstance.update();
+      }
     });
 
     // Đóng khi click ngoài bảng emoji
@@ -215,8 +225,8 @@ if (chatElement && typeof socket !== "undefined") {
   if (emojiPicker && inputContent) {
     emojiPicker.addEventListener("emoji-click", (event) => {
       const emoji = event.detail.unicode;
-      const start = inputContent.selectionStart || 0;
-      const end = inputContent.selectionEnd || 0;
+      const start = inputContent.selectionStart !== null ? inputContent.selectionStart : inputContent.value.length;
+      const end = inputContent.selectionEnd !== null ? inputContent.selectionEnd : inputContent.value.length;
 
       inputContent.value =
         inputContent.value.substring(0, start) +
